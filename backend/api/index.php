@@ -26,7 +26,11 @@ if (strpos($request, '/admins') !== false) {
 }
 
 // Guests
-elseif (strpos($request, '/guests') !== false) {
+elseif (strpos($request, '/guests/login') !== false && $method === 'POST') {
+    require_once '../controllers/GuestController.php';
+    $controller = new GuestController();
+    $controller->login($input);
+} elseif (strpos($request, '/guests') !== false) {
     require_once '../controllers/GuestController.php';
     $controller = new GuestController();
 
@@ -41,6 +45,7 @@ elseif (strpos($request, '/guests') !== false) {
         $controller->delete($_GET['id']);
     }
 }
+
 
 // Invalid endpoint
 else {

@@ -13,7 +13,7 @@
         <h2 class="text-2xl font-bold text-center mb-6" id="form-title">Login</h2>
 
         <!-- Form -->
-        <form id="auth-form" class="space-y-4">
+        <form id="auth-form" class="space-y-4" action="" method="POST">
             <div class="flex flex-col">
                 <label for="email" class="mb-1 text-gray-700">Email</label>
                 <input type="email" id="email" placeholder="Enter your email" class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -45,9 +45,9 @@
         const toggleText = document.getElementById('toggle-text');
         const formTitle = document.getElementById('form-title');
         const nameField = document.getElementById('name-field');
-
         let isLogin = true;
 
+        // Toggle between login and register
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
             if (isLogin) {
@@ -64,17 +64,16 @@
         });
 
         const form = document.getElementById('auth-form');
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
-            if (isLogin) {
-                alert(`Logging in with: ${email}`);
-            } else {
-                alert(`Registering: ${name}, ${email}`);
-            }
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const fullName = document.getElementById('name').value.trim();
+
+
+
         });
     </script>
+
 
 </html>

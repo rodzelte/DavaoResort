@@ -2,7 +2,6 @@
 class Admin
 {
     private $conn;
-    private $table_name = "admins";
 
     public function __construct($db)
     {
@@ -11,38 +10,44 @@ class Admin
 
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table_name;
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare("CALL ManageAdmins('READ', NULL, NULL, NULL, NULL, NULL)");
         $stmt->execute();
         return $stmt;
     }
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE admin_id = ?";
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare("CALL ManageAdmins('READ', ?, NULL, NULL, NULL, NULL)");
         $stmt->execute([$id]);
-        return $stmt;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function create($data)
     {
-        $query = "INSERT INTO " . $this->table_name . " (username, password_hash, full_name, email) VALUES (?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($query);
-        return $stmt->execute([$data['username'], password_hash($data['password'], PASSWORD_DEFAULT), $data['full_name'], $data['email']]);
+        $stmt = $this->conn->prepare("CALL ManageAdmins('CREATE', NULL, ?, ?, ?, ?)");
+        return $stmt->execute([
+            $data['username'],
+            password_hash($data['password'], PASSWORD_DEFAULT),
+            $data['full_name'],
+            $data['email']
+        ]);
     }
 
     public function update($id, $data)
     {
-        $query = "UPDATE " . $this->table_name . " SET username = ?, password_hash = ?, full_name = ?, email = ? WHERE admin_id = ?";
-        $stmt = $this->conn->prepare($query);
-        return $stmt->execute([$data['username'], password_hash($data['password'], PASSWORD_DEFAULT), $data['full_name'], $data['email'], $id]);
+        $stmt = $this->conn->prepare("CALL ManageAdmins('UPDATE', ?, ?, ?, ?, ?)");
+        return $stmt->execute([
+            $id,
+            $data['username'],
+            password_hash($data['password'], PASSWORD_DEFAULT),
+            $data['full_name'],
+            $data['email']
+        ]);
     }
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE admin_id = ?";
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare("CALL ManageAdmins('DELETE', ?, NULL, NULL, NULL, NULL)");
         return $stmt->execute([$id]);
     }
 }
